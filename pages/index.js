@@ -1,16 +1,55 @@
-import {Button} from 'antd';
+import { Button } from 'antd';
 import Link from 'next/link';
+import getCofnig from 'next/config'
+import { connect } from 'react-redux';
 
-export default ()=>
-   {
-     
+const { publicRuntimeConfig } = getCofnig()
+const Index = ({ user }) => {
+
+
+  if (!user || !user.id)
     return (
       <>
-    <div>onedrive</div>
-
-        <Button href="https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=9951a544-bcdd-4824-9651-d1703e54182d&scope=offline_access files.readwrite.all&response_type=code&redirect_uri=http://localhost:3000/auth/callback">aaa</Button>
- 
+        <div className="root">
+          <p>亲，您还没有登录哦~</p>
+          <Button type="primary" href={publicRuntimeConfig.OAUTH_URL}>登录</Button>
+        </div>
+        <style jsx>
+          {` 
+         .root{
+            height:400px;
+            display:flex;
+            flex-direction: column;
+            justify-content:center;
+            align-items:center;
+            
+          }`
+          }
+        </style>
       </>
     )
+
+  return (
+
+    <div>
+      <span> {user.userPrincipalName}</span>
+      <span> {user.displayName}</span>
+    </div>
+
+  )
+}
+
+Index.getInitialProps = async ({ ctx, reduxStore }) => {
+
+
+  return {};
+}
+
+
+export default connect(
+  function mapStateToProps(state) {
+    return {
+      user: state.user,
     }
-  
+  }
+)(Index)
