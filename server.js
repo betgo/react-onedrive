@@ -14,7 +14,7 @@ const RedisSessionStore = require('./server/session-store')
 
 
 // 创建redis client
-const redis = new Redis(6379,'192.168.1.106')
+const redis = new Redis()
 const Auth = require('./server/auth')
 app.prepare()
   .then(() => {

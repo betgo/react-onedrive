@@ -4,7 +4,7 @@ import 'antd/dist/antd.css'
 
 import { Provider } from 'react-redux'
 import Layout from '../components/Layout'
-import Hoc from '../lib/with_redux'
+import WithRedux from '../lib/with_redux'
 class MyApp extends App{
 
 
@@ -34,4 +34,4 @@ class MyApp extends App{
       }
 }
 
-export default Hoc(MyApp)
+export default WithRedux(MyApp)

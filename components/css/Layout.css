@@ -1,3 +1,14 @@
+.content {
+  color: red;
+}
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+}
+.header-left {
+  display: flex;
+  justify-content: flex-start;
+}
 
   #__next {
     height: 100%;

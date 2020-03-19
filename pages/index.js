@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 const { publicRuntimeConfig } = getCofnig()
 const Index = ({ user }) => {
 
-
+  console.log('index user',user)
   if (!user || !user.id)
     return (
       <>

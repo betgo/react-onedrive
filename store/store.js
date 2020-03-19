@@ -21,6 +21,25 @@ const allReducers =combineReducers(
     }
 ) 
 
+// action creators
+export function logout() {
+    return dispatch => {
+      axios
+        .post('/logout')
+        .then(resp => {
+          if (resp.status === 200) {
+            dispatch({
+              type: LOGOUT,
+            })
+          } else {
+            console.log('logout failed', resp)
+          }
+        })
+        .catch(err => {
+          console.log('logout failed', err)
+        })
+    }
+  }
 // console.log(store.getState())
 
 
