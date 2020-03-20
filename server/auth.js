@@ -4,9 +4,13 @@ const config = require('../config')
 
 const { client_id, request_token_url, scope, client_secret,redirect_uri } = config.onedrive
 
+
+
+
 module.exports = server => {
     server.use(async (ctx, next) => {
-        if (ctx.path === '/auth') {
+        //获取token
+        if (ctx.path === '/auth') { 
             console.log('auth', ctx.query)
             const code = ctx.query.code
             if (!code) {
@@ -35,6 +39,8 @@ module.exports = server => {
 
             if (result.status === 200 && (result.data && !result.data.error)) {
                 ctx.session.MICROSOFTAuth = result.data
+                //设置时间
+                ctx.session.token_time = new Date()
                 const { access_token, token_type,refresh_token } = result.data
                 const userInfoResp = await axios({
                     method: 'GET',
@@ -56,5 +62,18 @@ module.exports = server => {
             await next()
           }
         }
+
+      
     )
+    server.use(async(ctx,next)=>{
+        const path = ctx.path
+        const method = ctx.method
+        if(path ==='/logout' && method ==='POST'){
+
+            ctx.session = null
+            ctx.body = `logout success`
+        }else{
+            await next()
+        }
+    })
 }

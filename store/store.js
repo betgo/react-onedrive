@@ -2,7 +2,7 @@ import { countReducer,userReducer } from './reducer'
 import { createStore,combineReducers,applyMiddleware } from 'redux'
 import ReduxThunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-
+import axios  from 'axios'
 
 const userInitialState ={
     

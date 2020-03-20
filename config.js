@@ -12,6 +12,9 @@ module.exports = {
       redirect_uri,
     },
     MICROSOFT_OAUTH_URL,
+    API_URL:{
+      root:'drive/root/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime'
+    },
     OAUTH_URL: `${MICROSOFT_OAUTH_URL}?client_id=${client_id}&scope=${scope}&response_type=code&redirect_uri=${redirect_uri}`,
   }
   

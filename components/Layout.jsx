@@ -25,8 +25,7 @@ const OnedriveIconStyle = {
 };
 
 function MyLayout({ children, user,logout }) {
-  console.log("user", user);
-  console.log("logout", logout);
+
   const handleLogout = useCallback(() => {
     logout();
   }, [logout]);
@@ -34,7 +33,7 @@ function MyLayout({ children, user,logout }) {
   const userDropDown = (
     <Menu>
       <Menu.Item>
-        <a href="javascript:void(0)" onClick={handleLogout}>
+        <a href="#" onClick={handleLogout}>
           登 出
         </a>
       </Menu.Item>
@@ -50,7 +49,6 @@ function MyLayout({ children, user,logout }) {
               <Link href="/">
                 <CloudOutlined style={OnedriveIconStyle} />
               </Link>
-              aaa
             </div>
             <div>
               <Input.Search placeholder="搜索仓库" />
@@ -75,13 +73,15 @@ function MyLayout({ children, user,logout }) {
           </div>
         </Container>
       </Header>
-      <Content>{children}</Content>
-      <Footer></Footer>
+      <Content style={{padding:'0 50px'}}>
+        {children}
+        </Content>
+      <Footer style={{textAlign:"center"}}> @wxx</Footer>
     </Layout>
   );
 }
 
-export default connect( ( function mapState(state) {
+export default connect(  function mapState(state) {
   return {
     user: state.user,
   }
@@ -91,4 +91,4 @@ export default connect( ( function mapState(state) {
         logout: () => dispatch(logout())
       };
     }
-  ))(MyLayout);
+  )(MyLayout);

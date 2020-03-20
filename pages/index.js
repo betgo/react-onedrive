@@ -1,12 +1,31 @@
-import { Button } from 'antd';
+import { Button, Breadcrumb } from 'antd';
 import Link from 'next/link';
 import getCofnig from 'next/config'
 import { connect } from 'react-redux';
+import Axios from 'axios';
+import {useEffect} from 'react';
 
+import './css/index.css'
+
+const api = require('../lib/api')
 const { publicRuntimeConfig } = getCofnig()
-const Index = ({ user }) => {
 
-  console.log('index user',user)
+let cachedUserRepos
+const isServer = typeof window === 'undefined'
+const Index = ({ user, userRepos }) => {
+
+
+  useEffect(() => {
+    if (!isServer) {
+      cachedUserRepos = userRepos
+    }
+    const timeout = setTimeout(() => {
+      cachedUserRepos = null
+      cachedUserStaredRepos = null
+    }, 1000 * 60 * 10)
+
+  }, [cachedUserRepos]);
+
   if (!user || !user.id)
     return (
       <>
@@ -31,18 +50,62 @@ const Index = ({ user }) => {
 
   return (
 
-    <div>
-      <span> {user.userPrincipalName}</span>
-      <span> {user.displayName}</span>
-    </div>
+    <>
+      <Breadcrumb style={{ margin: '16px 0' }}>
+        <Breadcrumb.Item>Home</Breadcrumb.Item>
+        <Breadcrumb.Item>List</Breadcrumb.Item>
+        <Breadcrumb.Item>App</Breadcrumb.Item>
+      </Breadcrumb>
+      <div className="site-layout-content">
+        <span> {user.userPrincipalName}</span>
+        <span> {user.displayName}</span>
+        {
+          userRepos.map((repo, index) => (
+            <div key={index}>{repo.name}</div>
+          ))
+        }
+      </div>
+
+    </>
 
   )
 }
 
 Index.getInitialProps = async ({ ctx, reduxStore }) => {
 
+  // const result = await Axios.get('/drive/root/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime')
+  // .then(res=>console.log(res))
+  const user = reduxStore.getState().user
+  if (!user || !user.id) {
+    return {
+      isLogin: false,
+    }
+  }
 
-  return {};
+  if (!isServer) {
+
+    console.log('浏览器')
+    if (cachedUserRepos) {
+      return {
+        userRepos: cachedUserRepos,
+      }
+    }
+  }
+  if(isServer){
+    console.log('服务器')
+  }
+
+  const userRepos = await api.request(
+    {
+      url: '/drive/root/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime',
+    },
+    ctx.req,
+    ctx.res,
+  )
+  return {
+    isLogin: true,
+    userRepos: userRepos.data.value
+  };
 }
 
 

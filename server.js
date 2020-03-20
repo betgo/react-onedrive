@@ -16,6 +16,7 @@ const RedisSessionStore = require('./server/session-store')
 // 创建redis client
 const redis = new Redis()
 const Auth = require('./server/auth')
+const Api  =require('./server/api')
 app.prepare()
   .then(() => {
     const server = new Koa()
@@ -30,7 +31,7 @@ app.prepare()
     server.use(Session(SESSION_CONFIG, server))
 
     Auth(server)
-
+    Api(server)
 
 
 router.get('/api/user/info', async ctx => {
