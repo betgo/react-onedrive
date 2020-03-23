@@ -73,7 +73,7 @@ function MyLayout({ children, user,logout }) {
           </div>
         </Container>
       </Header>
-      <Content style={{padding:'0 50px'}}>
+      <Content style={{padding:'0 200px'}}>
         {children}
         </Content>
       <Footer style={{textAlign:"center"}}> @wxx</Footer>

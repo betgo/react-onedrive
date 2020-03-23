@@ -1,9 +1,13 @@
-import { Button, Breadcrumb } from 'antd';
+import { Button, Breadcrumb,List } from 'antd';
+
 import Link from 'next/link';
 import getCofnig from 'next/config'
 import { connect } from 'react-redux';
 import Axios from 'axios';
 import {useEffect} from 'react';
+
+import MyList from '../components/view/List';
+
 
 import './css/index.css'
 
@@ -12,6 +16,8 @@ const { publicRuntimeConfig } = getCofnig()
 
 let cachedUserRepos
 const isServer = typeof window === 'undefined'
+
+
 const Index = ({ user, userRepos }) => {
 
 
@@ -21,7 +27,7 @@ const Index = ({ user, userRepos }) => {
     }
     const timeout = setTimeout(() => {
       cachedUserRepos = null
-      cachedUserStaredRepos = null
+  
     }, 1000 * 60 * 10)
 
   }, [cachedUserRepos]);
@@ -57,16 +63,18 @@ const Index = ({ user, userRepos }) => {
         <Breadcrumb.Item>App</Breadcrumb.Item>
       </Breadcrumb>
       <div className="site-layout-content">
-        <span> {user.userPrincipalName}</span>
-        <span> {user.displayName}</span>
-        {
+        {/* <span> {user.userPrincipalName}</span>
+        <span> {user.displayName}</span> */}
+
+        {/* {
           userRepos.map((repo, index) => (
             <div key={index}>{repo.name}</div>
           ))
-        }
+        } */}
+          <MyList repos={userRepos}/>
       </div>
-
     </>
+
 
   )
 }
