@@ -32,6 +32,16 @@ const Index = ({ user, userRepos }) => {
 
   }, [cachedUserRepos]);
 
+
+  var  handleClick = async (name,e)=>{
+    e.preventDefault()
+   
+    const result = await Axios.get(name)
+    // const result = await 
+     console.log(result)
+  }
+
+
   if (!user || !user.id)
     return (
       <>
@@ -71,7 +81,8 @@ const Index = ({ user, userRepos }) => {
             <div key={index}>{repo.name}</div>
           ))
         } */}
-          <MyList repos={userRepos}/>
+        <Button onClick={handleClick}>aaa</Button>
+          <MyList repos={userRepos} next={handleClick} />
       </div>
     </>
 

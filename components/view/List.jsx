@@ -5,14 +5,15 @@ import Link from 'next/link';
 import {memo} from 'react';
 
 
-const ItemLink =memo(({data})=>{
+const ItemLink =memo(({data,next})=>{
 
-    const queryString = `/root:/${data.name}:/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime`
+    const queryString = `/drive/root:/${data.name}:/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime`
     // console.log(data)
     // console.log(data)
     return(
         <List.Item.Meta 
-        title={<Link href={queryString}><a>{data.name}</a></Link>}
+        // title={<Link href={queryString}><a>{data.name}</a></Link>}
+        title={<a href="#" onClick={next.bind(this,queryString)}>{data.name}</a>}
         description={data.lastModifiedDateTime.slice(0,10)}
         />
     )
@@ -22,7 +23,7 @@ const ItemLink =memo(({data})=>{
 //         )
 })
 
-function MyList({repos}){
+function MyList({repos,next}){
     
 
     return(
@@ -34,7 +35,7 @@ function MyList({repos}){
             <List.Item>
                 
             { item.folder? <FolderOutlined style={{paddingRight:'10px'}}/> :<div style={{paddingRight:'10px'}}><Video /></div>}
-                <ItemLink data={item}/>
+                <ItemLink data={item} next={next}/>
               
                
             </List.Item>
