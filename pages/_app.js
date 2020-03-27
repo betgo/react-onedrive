@@ -1,10 +1,11 @@
 import App, {Container}from 'next/app'
 
 import 'antd/dist/antd.css'
-
+import Router from 'next/router'
 import { Provider } from 'react-redux'
 import Layout from '../components/Layout'
 import WithRedux from '../lib/with_redux'
+import PageLoading from '../components/PageLoading';
 class MyApp extends App{
 
 
@@ -21,10 +22,11 @@ class MyApp extends App{
       }
       render() {
         const { Component, pageProps,reduxStore } = this.props
-    
+        console.log(reduxStore)
         return (
           <Container>
             <Provider store={reduxStore}>
+            {this.state.loading ? <PageLoading /> : null}
                 <Layout>
                    <Component {...pageProps} />
                 </Layout>

@@ -1,4 +1,4 @@
-import { countReducer,userReducer } from './reducer'
+import { countReducer,userReducer,loadingReducer} from './reducer'
 import { createStore,combineReducers,applyMiddleware } from 'redux'
 import ReduxThunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
@@ -7,17 +7,15 @@ import axios  from 'axios'
 const userInitialState ={
     
 }
-// const countInitialState = {
-//     count:0
-// }
-// const nameInitialState ={
-//     aaa:'sd',
-//     name :'www'
-// }
+const loadingInitialState={
+  loading:false
+}
+
 
 const allReducers =combineReducers(
     {
-        user:userReducer
+        user:userReducer,
+        loading:loadingReducer
     }
 ) 
 
@@ -53,7 +51,8 @@ export default function initializeStore(state){
         Object.assign(
             {},
             {
-                user:userInitialState
+                user:userInitialState,
+                loading:loadingInitialState
             },
             state
         ),

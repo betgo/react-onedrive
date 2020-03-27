@@ -4,9 +4,8 @@ const userInitialState ={
 const countInitialState = {
     count:0
 }
-const nameInitialState ={
-    aaa:'sd',
-    name :'www'
+const loadingInitialState={
+    loading:false
 }
 
 
@@ -33,4 +32,18 @@ export const countReducer = (state = countInitialState, action) => {
     }
 }
 
+export const loadingReducer = (state = loadingInitialState, action) => {
+    switch (action.type) {
+        case 'start':
+            return {
+                loading:true
+            };
+        case 'end':
+            return {
+                loading:false
+            };
 
+        default:
+            return state
+    }
+}
