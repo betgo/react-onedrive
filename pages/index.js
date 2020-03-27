@@ -1,10 +1,10 @@
-import { Button, Breadcrumb,List } from 'antd';
+import { Button, Breadcrumb, List } from 'antd';
 
-import Link from 'next/link';
 import getCofnig from 'next/config'
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import {useEffect} from 'react';
+import { LeftOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
 
 import MyList from '../components/view/List';
 
@@ -20,28 +20,65 @@ const isServer = typeof window === 'undefined'
 
 const Index = ({ user, userRepos }) => {
 
-
+  const [rep, setRep] = useState([userRepos]);
+  const [dep, setDep] = useState(0);
+  const [arr, setArr] = useState([]);
   useEffect(() => {
     if (!isServer) {
       cachedUserRepos = userRepos
     }
     const timeout = setTimeout(() => {
       cachedUserRepos = null
-  
+
     }, 1000 * 60 * 10)
 
   }, [cachedUserRepos]);
 
 
-  var  handleClick = async (name,e)=>{
+
+  const handleClick = async (name, e) => {
     e.preventDefault()
-   
-    const result = await Axios.get(name)
-    // const result = await 
-     console.log(result)
+    var url = ''
+    if (arr.length) {
+
+      for (let index = 0; index < arr.length; index++) {
+        const element = arr[index];
+        url = url + '/' + element
+      }
+    }
+    url = url + '/' + name
+    const queryString = `/drive/root:${url}:/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime`
+
+
+    const result = await Axios.get(queryString)
+
+    if (result.status === 200) {
+      rep.push(result.data.value)
+      arr.push(name)
+      setRep(rep)
+      setDep(dep + 1)
+      setArr(arr)
+    }
+    // console.log(arr)
+    // console.log(result.data.value)
   }
 
-
+  const handleBack = () => {
+    console.log(arr);
+    rep.pop()
+    arr.pop()
+    setRep(rep)
+    setDep(dep - 1)
+    setArr(arr)
+  }
+  const BreadcrumbList = (n) => {
+    
+    var items = []
+    for (let index = 0; index < n; index++) {
+      items.push(<Breadcrumb.Item>{arr[index]}</Breadcrumb.Item>)
+    }
+    return items
+  }
   if (!user || !user.id)
     return (
       <>
@@ -64,25 +101,40 @@ const Index = ({ user, userRepos }) => {
       </>
     )
 
+
+
   return (
 
     <>
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>List</Breadcrumb.Item>
-        <Breadcrumb.Item>App</Breadcrumb.Item>
+        {
+          BreadcrumbList(dep)
+        }
       </Breadcrumb>
       <div className="site-layout-content">
+        {/* <Button onClick={handleClick}>aaa</Button> */}
         {/* <span> {user.userPrincipalName}</span>
         <span> {user.displayName}</span> */}
 
         {/* {
-          userRepos.map((repo, index) => (
+          rep.map((repo, index) => (
             <div key={index}>{repo.name}</div>
           ))
         } */}
-        <Button onClick={handleClick}>aaa</Button>
-          <MyList repos={userRepos} next={handleClick} />
+        <div className="header">
+          <div className="pre">
+            {
+              dep ? <LeftOutlined style={{ fontSize: '20px' }} onClick={handleBack} /> : null
+            }
+
+          </div>
+          <div className="title">名称</div>
+          <div className="size">大小</div>
+          <div className="download">下载</div>
+        </div>
+        <MyList repos={rep[dep]} next={handleClick} />
+
       </div>
     </>
 
@@ -110,7 +162,7 @@ Index.getInitialProps = async ({ ctx, reduxStore }) => {
       }
     }
   }
-  if(isServer){
+  if (isServer) {
     console.log('服务器')
   }
 

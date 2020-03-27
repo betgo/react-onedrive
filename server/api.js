@@ -1,7 +1,7 @@
 
 const microsoft_base_url ='https://graph.microsoft.com/v1.0/me'
 
-const {requestOnedrive,fresh_token} =require('../lib/api')
+const {requestOnedrive,request} =require('../lib/api')
 
 module.exports=server=>{
 
@@ -11,20 +11,25 @@ module.exports=server=>{
         if(path.startsWith('/drive/')){
             console.log('server quest')
             console.log(path)
-            const session  = ctx.session
-            const MICROSOFTAuth = session && session.MICROSOFTAuth
-            const headers = {}
-            if(MICROSOFTAuth && MICROSOFTAuth.access_token){
-                headers['Authorization'] = `${MICROSOFTAuth.token_type} ${MICROSOFTAuth.access_token}`
-            }
-            // fresh_token(ctx)
-            const result = await requestOnedrive(
-                method,
-                ctx.url,
-                ctx.request.body || {},
-                headers
+            // const session  = ctx.session
+            // const MICROSOFTAuth = session && session.MICROSOFTAuth
+            // const headers = {}
+            // if(MICROSOFTAuth && MICROSOFTAuth.access_token){
+            //     headers['Authorization'] = `${MICROSOFTAuth.token_type} ${MICROSOFTAuth.access_token}`
+            // }
+            // // fresh_token(ctx)
+            // const result = await requestOnedrive(
+            //     method,
+            //     ctx.url,
+            //     ctx.request.body || {},
+            //     headers
+            // )
+            const result  = await request({
+                url:ctx.url,   
+            },
+            ctx
             )
-                console.log(result.data)
+            // console.log(result.data)
             ctx.status = result.status
             ctx.body = result.data
             // ctx.redirect((ctx.session && ctx.session.urlBeforeOAuth) || '/')

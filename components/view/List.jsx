@@ -1,5 +1,5 @@
 import {List} from 'antd';
-import {FolderOutlined} from '@ant-design/icons';
+import {FolderOutlined,DownloadOutlined} from '@ant-design/icons';
 import Video from '../../static/video.svg';
 import Link from 'next/link';
 import {memo} from 'react';
@@ -7,15 +7,17 @@ import {memo} from 'react';
 
 const ItemLink =memo(({data,next})=>{
 
-    const queryString = `/drive/root:/${data.name}:/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime`
+    // const queryString = `/drive/root:/${data.name}:/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime`
     // console.log(data)
     // console.log(data)
     return(
         <List.Item.Meta 
         // title={<Link href={queryString}><a>{data.name}</a></Link>}
-        title={<a href="#" onClick={next.bind(this,queryString)}>{data.name}</a>}
+        title={<a href="#" onClick={next.bind(this,data.name)}>{data.name}</a>}
         description={data.lastModifiedDateTime.slice(0,10)}
-        />
+        
+        >
+        </List.Item.Meta>
     )
 
 // return (data.folder?((<><FolderOutlined style={{paddingRight:'10px'}}/> <Link href={queryString}><a>{data.name}</a></Link></>)):
@@ -31,15 +33,18 @@ function MyList({repos,next}){
 
             itemLayout="horizontal"
             dataSource={repos}
-            renderItem={item => (
-            <List.Item>
+            renderItem={(item,index) => (
+            <List.Item key={index}>
                 
             { item.folder? <FolderOutlined style={{paddingRight:'10px'}}/> :<div style={{paddingRight:'10px'}}><Video /></div>}
-                <ItemLink data={item} next={next}/>
-              
-               
+                <ItemLink data={item} next={next}/> 
+            {item.folder?<span style={{paddingRight:'20px'}}></span>: <span style={{paddingRight:'20px'}}>{Math.floor(item.size/1024/1024)} MB</span>} 
+                <DownloadOutlined />
             </List.Item>
             )}
+            extra={
+                <DownloadOutlined />
+            }
             />
     
     )
