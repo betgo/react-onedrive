@@ -22,11 +22,13 @@ class MyApp extends App{
       }
       render() {
         const { Component, pageProps,reduxStore } = this.props
-        console.log(reduxStore)
+        // console.log(reduxStore.getState())
+        // let state = reduxStore.getState()
+      
         return (
           <Container>
             <Provider store={reduxStore}>
-            {this.state.loading ? <PageLoading /> : null}
+           
                 <Layout>
                    <Component {...pageProps} />
                 </Layout>

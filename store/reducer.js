@@ -35,9 +35,9 @@ export const countReducer = (state = countInitialState, action) => {
 export const loadingReducer = (state = loadingInitialState, action) => {
     switch (action.type) {
         case 'start':
-            return {
+            return  {
                 loading:true
-            };
+            }
         case 'end':
             return {
                 loading:false

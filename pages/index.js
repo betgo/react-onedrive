@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Axios from 'axios';
 import { LeftOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
-
+import PageLoading from '../components/PageLoading';
 import MyList from '../components/view/List';
 
 
@@ -16,9 +16,10 @@ const { publicRuntimeConfig } = getCofnig()
 
 let cachedUserRepos
 const isServer = typeof window === 'undefined'
+const loading_Start_Action = { type: 'start' }
+const loading_End_Action = { type: 'end' }
 
-
-const Index = ({ user, userRepos }) => {
+const Index = ({ user, userRepos,loading,handleLoadingStart,handleLoadingEnd }) => {
 
   const [rep, setRep] = useState([userRepos]);
   const [dep, setDep] = useState(0);
@@ -48,10 +49,11 @@ const Index = ({ user, userRepos }) => {
     }
     url = url + '/' + name
     const queryString = `/drive/root:${url}:/children?select=name,size,folder,@microsoft.graph.downloadUrl,lastModifiedDateTime`
-
-
+    // loading({type:'start'})
+    console.log(1)
+    handleLoadingStart()
     const result = await Axios.get(queryString)
-
+    handleLoadingEnd()
     if (result.status === 200) {
       rep.push(result.data.value)
       arr.push(name)
@@ -106,6 +108,7 @@ const Index = ({ user, userRepos }) => {
   return (
 
     <>
+     { loading.loading? <PageLoading />:null}
       <Breadcrumb style={{ margin: '16px 0' }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
         {
@@ -184,6 +187,13 @@ export default connect(
   function mapStateToProps(state) {
     return {
       user: state.user,
+      loading:state.loading
+    }
+  },
+  function mapDispatchToProps(dispatch) {
+    return {
+      handleLoadingStart: () => dispatch(loading_Start_Action),
+      handleLoadingEnd:  () => dispatch(loading_End_Action)
     }
   }
 )(Index)
