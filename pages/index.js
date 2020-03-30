@@ -1,5 +1,4 @@
 import { Button, Breadcrumb, List } from 'antd';
-
 import getCofnig from 'next/config'
 import { connect } from 'react-redux';
 import Axios from 'axios';
